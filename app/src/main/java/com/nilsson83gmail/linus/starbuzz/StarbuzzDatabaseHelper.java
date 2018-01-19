@@ -11,10 +11,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class StarbuzzDatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DB_NAME = "starbuzz";
-    private static final int DB_VERSION = 2;
+    private static final String DB_NAME = "starbuzz"; // the name of our database
+    private static final int DB_VERSION = 2; // the version of the database
 
-    public StarbuzzDatabaseHelper(Context context) {
+    StarbuzzDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
@@ -28,21 +28,24 @@ public class StarbuzzDatabaseHelper extends SQLiteOpenHelper {
         updateMyDatabase(db, oldVersion, newVersion);
     }
 
-    private void insertDrink(SQLiteDatabase db, String name, String description, int resourceId) {
+    private static void insertDrink(SQLiteDatabase db, String name, String description,
+                                    int resourceId) {
         ContentValues drinkValues = new ContentValues();
         drinkValues.put("NAME", name);
         drinkValues.put("DESCRIPTION", description);
         drinkValues.put("IMAGE_RESOURCE_ID", resourceId);
         db.insert("DRINK", null, drinkValues);
     }
+
     private void updateMyDatabase(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 1) {
             db.execSQL("CREATE TABLE DRINK (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + "NAME TEXT, "
                     + "DESCRIPTION TEXT, "
-                    + "IMAGE_RESORUCE_ID INTEGER);");
+                    + "IMAGE_RESOURCE_ID INTEGER);");
             insertDrink(db, "Latte", "Espresso and steamed milk", R.drawable.latte);
-            insertDrink(db, "Cappuccino", "Espresso, hot milk and steamed-milk foam", R.drawable.cappuccino);
+            insertDrink(db, "Cappuccino", "Espresso, hot milk and steamed-milk foam",
+                    R.drawable.cappuccino);
             insertDrink(db, "Filter", "Our best drip coffee", R.drawable.filter);
         }
         if (oldVersion < 2) {

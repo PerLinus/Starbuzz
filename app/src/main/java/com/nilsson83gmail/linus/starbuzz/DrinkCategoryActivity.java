@@ -22,16 +22,19 @@ public class DrinkCategoryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drink_category);
-
-        ListView listDrinks = (ListView) findViewById(R.id.list_drinks);
-
         SQLiteOpenHelper starbuzzDatabaseHelper = new StarbuzzDatabaseHelper(this);
+        ListView listDrinks = (ListView) findViewById(R.id.list_drinks);
         try {
             db = starbuzzDatabaseHelper.getReadableDatabase();
-            cursor = db.query("DRINK", new String[]{"_id", "NAME"}, null, null, null, null, null);
-
-            SimpleCursorAdapter listAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, cursor, new String[]{"NAME"}, new int[]{android.R.id.text1}, 0);
-            Object o = listAdapter.getItem(0);
+            cursor = db.query("DRINK",
+                    new String[]{"_id", "NAME"},
+                    null, null, null, null, null);
+            SimpleCursorAdapter listAdapter = new SimpleCursorAdapter(this,
+                    android.R.layout.simple_list_item_1,
+                    cursor,
+                    new String[]{"NAME"},
+                    new int[]{android.R.id.text1},
+                    0);
             listDrinks.setAdapter(listAdapter);
         } catch(SQLiteException e) {
             Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
@@ -40,29 +43,29 @@ public class DrinkCategoryActivity extends Activity {
 
         //Create the listener
         AdapterView.OnItemClickListener itemClickListener =
-                new AdapterView.OnItemClickListener() {
+                new AdapterView.OnItemClickListener(){
                     @Override
-                    public void onItemClick(AdapterView<?>  listDrinks,
-                                                            View itemView,
-                                                            int position,
-                                                            long id) {
+                    public void onItemClick(AdapterView<?> listDrinks,
+                                            View itemView,
+                                            int position,
+                                            long id) {
                         //Pass the drink the user clicks on to DrinkActivity
                         Intent intent = new Intent(DrinkCategoryActivity.this,
-                                                    DrinkActivity.class);
+                                DrinkActivity.class);
                         intent.putExtra(DrinkActivity.EXTRA_DRINKID, (int) id);
                         startActivity(intent);
                     }
                 };
+
         //Assign the listener to the list view
         listDrinks.setOnItemClickListener(itemClickListener);
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy(){
         super.onDestroy();
         cursor.close();
         db.close();
     }
-
 }
 
